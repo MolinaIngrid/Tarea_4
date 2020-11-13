@@ -1,8 +1,15 @@
 ---
 title: "Tarea.4"
-author: "Ingrid Mauricio Raquel"
+author: "Ingrid Minor Raquel"
 date: "7/11/2020"
-output: html_document
+output: 
+ prettydoc::html_pretty:
+    theme: Leonids
+    highlight: vignette
+vignette: >
+  %\VignetteIndexEntry{Creating Pretty Documents from R Markdown - The Leonids Theme}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
