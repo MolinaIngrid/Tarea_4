@@ -1,0 +1,103 @@
+---
+title: "Tarea.4"
+author: "Ingrid Mauricio Raquel"
+date: "7/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+En un periodo de 10 años (A) Nuestro equipo trabajó en 60 poblaciones (P) de *P. pajaritus* desde Canadá hasta Ecuador. En cada población tomamos una muestra de sangre de 10 individuos de la que extrajimos ADN genómico y amplificamos y secuenciamos los genes CMH-I para obtener el número de alelos por individuo.
+
+Además cuantificamos 5 variables que son indicadoras de la degradación del hábitat y obtuvimos las coordenadas geográficas para cada población.
+
+**pregunta** Cómo se ve afectada la complejidad alélica de *P. pajaritus* debido a la degradación del hábitat
+
+``` {r, echo=FALSE}
+Datos <- read.table("C:/Users/in/Documents/MAESTRIA/Cursos/Estrategias/Tarea.4/Datos_tarea4.csv", 
+                 header = TRUE,
+                 sep = ",")
+
+```
+
+```{r load-packages, include=FALSE}
+library(ggplot2)
+library(GGally)
+```
+
+### Explorando los datos 
+
+Hacemos un gráfico para observar visualmente las relaciones entre las variables predictoras y la variable respuesta
+``` {r}
+
+ggpairs(Datos, lower = list(continuous = "smooth"),
+        diag = list(continuous = "barDiag"), axisLabels = "none")
+
+```
+
+Las variables que tienen una mayor relación lineal con la Diversidad alélica son: H4 (r= -0.66), Latitud (r= 0.334) y H1 (r= 0.304).
+
+
+### El modelo con todos los predictores.
+
+``` {r}
+
+regresion <- lm(D~H1+H2+H3+H4+H5+P+L, data = Datos)
+
+summary(regresion)
+
+```
+
+
+El modelo con todas las variables introducidas como predictores tiene un R2 de casi 0.5 (0.496), es capaz de explicar el 50% de la variabilidad observada en la Diversidad alélica. El p-value del modelo es significativo (2.2e-16).  Muchos de los coeficientes parciales de regresión no son significativos, lo que es un indicativo de que podrían no contribuir al modelo.
+
+### Selección del mejor modelo
+Iniciando el modelo con todas las variables como predictores y realizando la selección de los mejores predictores con la medición Akaike(AIC).
+
+
+```{r}
+step(object = regresion, direction = "both", trace = 1)
+```
+
+
+El mejor modelo resultante del proceso de selección ha sido:
+lm(formula = D ~ H1 + H2 + H4 + H5 + P + L, data = Datos)
+
+
+
+```{r}
+
+modelo1 <- lm(formula = D ~ H1 + H2 + H4 + H5 + P + L, data = Datos)
+
+summary(modelo1)
+
+```
+
+### Eliminando algunas variables para disminuir la variabilidad:
+
+``` {r}
+modelo2 <- lm(formula = D ~ H1 + H2 + H4 + L, data = Datos)
+
+summary(modelo2)
+```
+
+Finalmente decidimos quedarnos con el modelo2 ya que es más parsimonioso. 
+
+### Interpretación del modelo2
+
+Por cada unidad que aumenta el predictor H1, la Diversidad alélica disminuye en promedio 1.9 unidades, manteniéndose constantes el resto de predictores.
+
+Por cada unidad que aumenta el predictor H2, la Diversidad alélica disminuye en promedio 1.7 unidades, manteniéndose constantes el resto de predictores.
+
+Por cada unidad que aumenta el predictor H4, la Diversidad alélica disminuye en promedio 6 unidades, manteniéndose constantes el resto de predictores.
+
+Por cada unidad que aumenta la Latitud, la Diversidad alélica disminuye en promedio 0.4 unidades, manteniéndose constantes el resto de predictores.
+
+Creo que sería más eficiente utilizar únicmaente H4 como proxy de la destrucción del hábitat en lugar de 5 variables como indicadoras de esa destrucción.
+
+**Información de la sesión**
+```{r, echo=FALSE}
+sessionInfo()
+```
