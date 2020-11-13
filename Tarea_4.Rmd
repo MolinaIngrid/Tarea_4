@@ -4,10 +4,10 @@ author: "Ingrid Minor Raquel"
 date: "7/11/2020"
 output: 
  prettydoc::html_pretty:
-    theme: Leonids
+    theme: Cayman
     highlight: vignette
 vignette: >
-  %\VignetteIndexEntry{Creating Pretty Documents from R Markdown - The Leonids Theme}
+  %\VignetteIndexEntry{Creating Pretty Documents from R Markdown - The Cayman Theme}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -71,7 +71,7 @@ step(object = regresion, direction = "both", trace = 1)
 
 El mejor modelo resultante del proceso de selección ha sido:
 lm(formula = D ~ H1 + H2 + H4 + H5 + P + L, data = Datos)
-
+Le llamaremos modelo1
 
 
 ```{r}
@@ -82,23 +82,15 @@ summary(modelo1)
 
 ```
 
-### Eliminando algunas variables para disminuir la variabilidad:
-
-``` {r}
-modelo2 <- lm(formula = D ~ H1 + H2 + H4 + L, data = Datos)
-
-summary(modelo2)
-```
-
-Finalmente decidimos quedarnos con el modelo2 ya que es más parsimonioso. 
-
-### Interpretación del modelo2
+### Interpretación del modelo
 
 Por cada unidad que aumenta el predictor H1, la Diversidad alélica disminuye en promedio 1.9 unidades, manteniéndose constantes el resto de predictores.
 
 Por cada unidad que aumenta el predictor H2, la Diversidad alélica disminuye en promedio 1.7 unidades, manteniéndose constantes el resto de predictores.
 
 Por cada unidad que aumenta el predictor H4, la Diversidad alélica disminuye en promedio 6 unidades, manteniéndose constantes el resto de predictores.
+
+Por cada unidad que aumenta el predictor H5, la Diversidad alélica aumenta en promedio 6 unidades, manteniéndose constantes el resto de predictores.
 
 Por cada unidad que aumenta la Latitud, la Diversidad alélica disminuye en promedio 0.4 unidades, manteniéndose constantes el resto de predictores.
 

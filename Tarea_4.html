@@ -274,7 +274,7 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 ##    44.24062     -1.91072     -1.68995     -5.79723      0.58661      0.03281  
 ##           L  
 ##    -0.98640</code></pre>
-<p>El mejor modelo resultante del proceso de selección ha sido: lm(formula = D ~ H1 + H2 + H4 + H5 + P + L, data = Datos)</p>
+<p>El mejor modelo resultante del proceso de selección ha sido: lm(formula = D ~ H1 + H2 + H4 + H5 + P + L, data = Datos) Le llamaremos modelo1</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">modelo1 &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="dt">formula =</span> D <span class="op">~</span><span class="st"> </span>H1 <span class="op">+</span><span class="st"> </span>H2 <span class="op">+</span><span class="st"> </span>H4 <span class="op">+</span><span class="st"> </span>H5 <span class="op">+</span><span class="st"> </span>P <span class="op">+</span><span class="st"> </span>L, <span class="dt">data =</span> Datos)</a>
 <a class="sourceLine" id="cb8-2" title="2"></a>
 <a class="sourceLine" id="cb8-3" title="3"><span class="kw">summary</span>(modelo1)</a></code></pre></div>
@@ -302,39 +302,12 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 ## Multiple R-squared:  0.4965, Adjusted R-squared:  0.4914 
 ## F-statistic: 97.44 on 6 and 593 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
-<div id="eliminando-algunas-variables-para-disminuir-la-variabilidad" class="section level3">
-<h3>Eliminando algunas variables para disminuir la variabilidad:</h3>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">modelo2 &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="dt">formula =</span> D <span class="op">~</span><span class="st"> </span>H1 <span class="op">+</span><span class="st"> </span>H2 <span class="op">+</span><span class="st"> </span>H4 <span class="op">+</span><span class="st"> </span>L, <span class="dt">data =</span> Datos)</a>
-<a class="sourceLine" id="cb10-2" title="2"></a>
-<a class="sourceLine" id="cb10-3" title="3"><span class="kw">summary</span>(modelo2)</a></code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = D ~ H1 + H2 + H4 + L, data = Datos)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -17.3645  -4.5578   0.9481   4.9129  15.6872 
-## 
-## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)  45.1682     0.3103 145.549  &lt; 2e-16 ***
-## H1           -1.9183     0.3096  -6.196 1.08e-09 ***
-## H2           -1.7836     0.3366  -5.298 1.65e-07 ***
-## H4           -6.0570     0.3180 -19.047  &lt; 2e-16 ***
-## L            -0.3970     0.3828  -1.037      0.3    
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 7.125 on 595 degrees of freedom
-## Multiple R-squared:  0.4915, Adjusted R-squared:  0.4881 
-## F-statistic: 143.8 on 4 and 595 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p>Finalmente decidimos quedarnos con el modelo2 ya que es más parsimonioso.</p>
-</div>
-<div id="interpretación-del-modelo2" class="section level3">
-<h3>Interpretación del modelo2</h3>
+<div id="interpretación-del-modelo" class="section level3">
+<h3>Interpretación del modelo</h3>
 <p>Por cada unidad que aumenta el predictor H1, la Diversidad alélica disminuye en promedio 1.9 unidades, manteniéndose constantes el resto de predictores.</p>
 <p>Por cada unidad que aumenta el predictor H2, la Diversidad alélica disminuye en promedio 1.7 unidades, manteniéndose constantes el resto de predictores.</p>
 <p>Por cada unidad que aumenta el predictor H4, la Diversidad alélica disminuye en promedio 6 unidades, manteniéndose constantes el resto de predictores.</p>
+<p>Por cada unidad que aumenta el predictor H5, la Diversidad alélica aumenta en promedio 6 unidades, manteniéndose constantes el resto de predictores.</p>
 <p>Por cada unidad que aumenta la Latitud, la Diversidad alélica disminuye en promedio 0.4 unidades, manteniéndose constantes el resto de predictores.</p>
 <p>Creo que sería más eficiente utilizar únicmaente H4 como proxy de la destrucción del hábitat en lugar de 5 variables como indicadoras de esa destrucción.</p>
 <p><strong>Información de la sesión</strong></p>
