@@ -23,11 +23,9 @@ Además cuantificamos 5 variables que son indicadoras de la degradación del há
 Nuestra **pregunta** es cómo se ve afectada la complejidad alélica (D) de *P. pajaritus* debido a la degradación del hábitat.
 
 ``` {r, echo=FALSE}
-<<<<<<< HEAD
-Datos <- read.table("C:/Users/raque/Desktop/Ciencia_rep/Tarea_4/Datos_tarea4.csv", header = TRUE, sep = ",")
-=======
-Datos <- read.table("C:/Users/Usuario/Tarea_4/Datos_tarea4.csv", header = TRUE, sep = ",")
->>>>>>> 76832b8... Cambios
+Datos <- read.table("C:/Users/in/Documents/MAESTRIA/Cursos/Estrategias/Tarea.4/Datos_tarea4.csv", 
+                 header = TRUE,
+                 sep = ",")
 
 ```
 
@@ -183,6 +181,44 @@ En general, observamos un efecto significativo del efecto latitudinal, a excepci
 
 >>>>>>> 76832b8... Cambios
 
+## 3. Módelo para cada una de las variables de degradación de hábitat (H), considerando que los individuos no son unidades independientes.
+
+Es un error asumir N=600 y eliminar la variable "Población" de los modelos. Cada uno de los pájaros no son independientes entre sí sino que están agrupados en poblaciones. Si eliminamos esa variable estaríamos subestimando la incertidumbre del efecto de cada una de las H sobre la diversidad alélica. 
+
+Propongo dejar "Población" como variable en los modelos 
+
+```{r}
+
+# Modelo lineal con H1
+mH1 <- lm(D ~ H1 + L + P, Datos)
+summary(m1)
+
+# Modelo lineal con H2
+mH2 <- lm(D ~ H2 + L + P, Datos)
+summary(m2)
+
+# Modelo lineal con H3
+mH3 <- lm(D ~ H3 + L + P, Datos)
+summary(m3)
+
+# Modelo lineal con H4
+mH4 <- lm(D ~ H4 + L + P, Datos)
+summary(m4)
+
+# Modelo lineal con H5
+mH5 <- lm(D ~ H5 + L + P, Datos)
+summary(m5)
+
+```
+
+### Interprestación de los modelos
+
+Los modelos que incluyen H1 y H4 muestran efectos significativos de estas variables sobre la diversidad alélica. 
+En el modelo mH1, observamos que por cada unidad que aumente H1, la diversidad alélica disminuye en promedio 2 unidades. Además, observamos un efecto significativo del efecto latitudinal, donde por cada unidad que aumentemos en latitud, la diversidad alélica disminuye en promedio 3.4 unidades.
+Además se observa un efecto significativo leve de cada población de *P. pajaritus* (estimado = 0.16) Si hubieramos eliminado "población" **no notaríamos este efecto.**
+
+Con mH4, por cada unidad que aumente H4, la diversidad alélica disminuye en promedio 6 unidades. No obstante, no observamos un efecto significativo de las poblaciones de *P. pajaritus*.
+Hay efecto leve de la latitud ya que por cada unidad que aumente, se disminuye en promedio 1 unidad de diversidad alélica.
 
 
 **Información de la sesión**
