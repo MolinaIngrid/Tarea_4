@@ -23,7 +23,11 @@ Además cuantificamos 5 variables que son indicadoras de la degradación del há
 Nuestra **pregunta** es cómo se ve afectada la complejidad alélica (D) de *P. pajaritus* debido a la degradación del hábitat.
 
 ``` {r, echo=FALSE}
+<<<<<<< HEAD
 Datos <- read.table("C:/Users/raque/Desktop/Ciencia_rep/Tarea_4/Datos_tarea4.csv", header = TRUE, sep = ",")
+=======
+Datos <- read.table("C:/Users/Usuario/Tarea_4/Datos_tarea4.csv", header = TRUE, sep = ",")
+>>>>>>> 76832b8... Cambios
 
 ```
 
@@ -132,7 +136,52 @@ Mientras que con el modelo m4, donde evaluamos a H4, obtuvimos un mayor efecto d
 
 Dadas estas diferencias observadas entre las variables H, y el dilema entre las variables H4 y H1, sugerimos probar si excluyendo alguna (s) poblacion (es) de *P. pajaritus* podamos evaluar si al hacer estas variaciones observemos un efecto significativo de la variable población (P) en el modelo lineal con H4.
 
+<<<<<<< HEAD
 ## 3. 
+=======
+
+## 3. Módelo para cada una de las variables de degradación de hábitat (H), considerando homogeneidad en las poblaciones
+
+
+Dado que tenemos cinco variables distintas para medir la degradación del hábitat, probamos hacer un modelo para cada una de estas variables para evaluar si tienen un efecto distinto sobre la diversidad alélica de *P. pajaritus*. Sin embargo, tenemos 60 poblaciones, cada una con 10 aves, es decir 600 aves, por lo que vamos a asumir que este es nuestro N.
+
+```{r}
+# Modelo lineal con H1
+m1.1 <- lm(D ~ H1 + L, Datos)
+summary(m1.1)
+
+# Modelo lineal con H2
+m2.1 <- lm(D ~ H2 + L, Datos)
+summary(m2.1)
+
+# Modelo lineal con H3
+m3.1 <- lm(D ~ H3 + L, Datos)
+summary(m3.1)
+
+# Modelo lineal con H4
+m4.1 <- lm(D ~ H4 + L, Datos)
+summary(m4.1)
+
+# Modelo lineal con H5
+m5.1 <- lm(D ~ H5  + L, Datos)
+summary(m5.1)
+
+m <- c(m1.1$effects, m2.1$effects, m3.1$effects, m4.1$effects, m5.1$effects)
+
+```
+### Interpretación de los modelos
+
+En este caso, los modelos con H1, H2 y H4 son las mejores candidatos para representar la degradación del hábitat en nuestro mejor modelo. 
+
+En el modelo m1.1, con H1, observamos un efecto significativo de esta variable, donde por cada unidad que aumente H1, la diversidad alélica disminuye en 2.2 unidad.
+
+En el modelo m2.1, con H2, observamos también un efecto significativo de esta variable, donde por cada unidad que aumente H2, la diversidad alélica disminuye en 1.8 unidades.
+
+Mientras que con el modelo m4.4, con H4, obtuvimos un mayor efecto de la variable, pues por cada unidad que aumente H4, la diversidad alélica disminuye en promedio 6 unidades.
+
+En general, observamos un efecto significativo del efecto latitudinal, a excepción del modelo con H4.
+
+>>>>>>> 76832b8... Cambios
 
 
 

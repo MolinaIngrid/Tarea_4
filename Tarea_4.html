@@ -415,8 +415,132 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 <p>Dadas estas diferencias observadas entre las variables H, y el dilema entre las variables H4 y H1, sugerimos probar si excluyendo alguna (s) poblacion (es) de <em>P. pajaritus</em> podamos evaluar si al hacer estas variaciones observemos un efecto significativo de la variable población (P) en el modelo lineal con H4.</p>
 </div>
 </div>
+<<<<<<< HEAD
 <div id="section" class="section level2">
 <h2>3.</h2>
+=======
+<div id="módelo-para-cada-una-de-las-variables-de-degradación-de-hábitat-h-considerando-homogeneidad-en-las-poblaciones" class="section level2">
+<h2>3. Módelo para cada una de las variables de degradación de hábitat (H), considerando homogeneidad en las poblaciones</h2>
+<p>Dado que tenemos cinco variables distintas para medir la degradación del hábitat, probamos hacer un modelo para cada una de estas variables para evaluar si tienen un efecto distinto sobre la diversidad alélica de <em>P. pajaritus</em>. Sin embargo, tenemos 60 poblaciones, cada una con 10 aves, es decir 600 aves, por lo que vamos a asumir que este es nuestro N.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="co"># Modelo lineal con H1</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a>m1<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H1 <span class="op">+</span><span class="st"> </span>L, Datos)</span>
+<span id="cb20-3"><a href="#cb20-3"></a><span class="kw">summary</span>(m1<span class="fl">.1</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = D ~ H1 + L, data = Datos)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -26.372  -3.816   2.162   6.428  15.679 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  44.6517     0.3973 112.395  &lt; 2e-16 ***
+## H1           -2.1667     0.3974  -5.453 7.28e-08 ***
+## L            -2.9327     0.4460  -6.575 1.06e-10 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 9.174 on 597 degrees of freedom
+## Multiple R-squared:  0.154,  Adjusted R-squared:  0.1511 
+## F-statistic: 54.32 on 2 and 597 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="co"># Modelo lineal con H2</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a>m2<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H2 <span class="op">+</span><span class="st"> </span>L, Datos)</span>
+<span id="cb22-3"><a href="#cb22-3"></a><span class="kw">summary</span>(m2<span class="fl">.1</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = D ~ H2 + L, data = Datos)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -29.324  -3.097   2.317   6.334  15.812 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  44.8239     0.3995 112.186  &lt; 2e-16 ***
+## H2           -1.7719     0.4374  -4.051 5.78e-05 ***
+## L            -4.0911     0.4342  -9.422  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 9.273 on 597 degrees of freedom
+## Multiple R-squared:  0.1356, Adjusted R-squared:  0.1327 
+## F-statistic: 46.82 on 2 and 597 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="co"># Modelo lineal con H3</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a>m3<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H3 <span class="op">+</span><span class="st"> </span>L, Datos)</span>
+<span id="cb24-3"><a href="#cb24-3"></a><span class="kw">summary</span>(m3<span class="fl">.1</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = D ~ H3 + L, data = Datos)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -30.369  -3.640   2.867   6.387  14.686 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  44.9865     0.4063 110.715  &lt; 2e-16 ***
+## H3           -0.9242     0.4405  -2.098   0.0363 *  
+## L            -3.5339     0.4405  -8.022 5.51e-15 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 9.366 on 597 degrees of freedom
+## Multiple R-squared:  0.1183, Adjusted R-squared:  0.1154 
+## F-statistic: 40.06 on 2 and 597 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="co"># Modelo lineal con H4</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a>m4<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H4 <span class="op">+</span><span class="st"> </span>L, Datos)</span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="kw">summary</span>(m4<span class="fl">.1</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = D ~ H4 + L, data = Datos)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -22.714  -4.593   1.619   4.858  14.733 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  45.4432     0.3235 140.487   &lt;2e-16 ***
+## H4           -6.1974     0.3332 -18.598   &lt;2e-16 ***
+## L            -0.6860     0.3803  -1.804   0.0718 .  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 7.48 on 597 degrees of freedom
+## Multiple R-squared:  0.4376, Adjusted R-squared:  0.4358 
+## F-statistic: 232.3 on 2 and 597 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="co"># Modelo lineal con H5</span></span>
+<span id="cb28-2"><a href="#cb28-2"></a>m5<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H5  <span class="op">+</span><span class="st"> </span>L, Datos)</span>
+<span id="cb28-3"><a href="#cb28-3"></a><span class="kw">summary</span>(m5<span class="fl">.1</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = D ~ H5 + L, data = Datos)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -31.046  -3.706   2.701   6.599  15.828 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  44.9788     0.4060 110.786  &lt; 2e-16 ***
+## H5            0.8879     0.4286   2.071   0.0387 *  
+## L            -4.3140     0.5117  -8.431 2.58e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 9.366 on 597 degrees of freedom
+## Multiple R-squared:  0.1182, Adjusted R-squared:  0.1152 
+## F-statistic:    40 on 2 and 597 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>m &lt;-<span class="st"> </span><span class="kw">c</span>(m1<span class="fl">.1</span><span class="op">$</span>effects, m2<span class="fl">.1</span><span class="op">$</span>effects, m3<span class="fl">.1</span><span class="op">$</span>effects, m4<span class="fl">.1</span><span class="op">$</span>effects, m5<span class="fl">.1</span><span class="op">$</span>effects)</span></code></pre></div>
+<div id="interpretación-de-los-modelos-1" class="section level3">
+<h3>Interpretación de los modelos</h3>
+<p>En este caso, los modelos con H1, H2 y H4 son las mejores candidatos para representar la degradación del hábitat en nuestro mejor modelo.</p>
+<p>En el modelo m1.1, con H1, observamos un efecto significativo de esta variable, donde por cada unidad que aumente H1, la diversidad alélica disminuye en 2.2 unidad.</p>
+<p>En el modelo m2.1, con H2, observamos también un efecto significativo de esta variable, donde por cada unidad que aumente H2, la diversidad alélica disminuye en 1.8 unidades.</p>
+<p>Mientras que con el modelo m4.4, con H4, obtuvimos un mayor efecto de la variable, pues por cada unidad que aumente H4, la diversidad alélica disminuye en promedio 6 unidades.</p>
+<p>En general, observamos un efecto significativo del efecto latitudinal, a excepción del modelo con H4.</p>
+>>>>>>> 76832b8... Cambios
 <p><strong>Información de la sesión</strong></p>
 <pre><code>## R version 4.0.2 (2020-06-22)
 ## Platform: x86_64-w64-mingw32/x64 (64-bit)
@@ -425,11 +549,17 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 ## Matrix products: default
 ## 
 ## locale:
+<<<<<<< HEAD
 ## [1] LC_COLLATE=English_United States.1252 
 ## [2] LC_CTYPE=English_United States.1252   
 ## [3] LC_MONETARY=English_United States.1252
 ## [4] LC_NUMERIC=C                          
 ## [5] LC_TIME=English_United States.1252    
+=======
+## [1] LC_COLLATE=Spanish_Costa Rica.1252  LC_CTYPE=Spanish_Costa Rica.1252   
+## [3] LC_MONETARY=Spanish_Costa Rica.1252 LC_NUMERIC=C                       
+## [5] LC_TIME=Spanish_Costa Rica.1252    
+>>>>>>> 76832b8... Cambios
 ## 
 ## attached base packages:
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
@@ -440,16 +570,27 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_1.0.5         pillar_1.4.6       compiler_4.0.2     RColorBrewer_1.1-2
 ##  [5] plyr_1.8.6         prettydoc_0.4.0    tools_4.0.2        digest_0.6.25     
+<<<<<<< HEAD
 ##  [9] lattice_0.20-41    nlme_3.1-148       evaluate_0.14      lifecycle_0.2.0   
 ## [13] tibble_3.0.3       gtable_0.3.0       mgcv_1.8-31        pkgconfig_2.0.3   
 ## [17] rlang_0.4.7        Matrix_1.2-18      yaml_2.2.1         xfun_0.18         
 ## [21] withr_2.2.0        stringr_1.4.0      dplyr_1.0.2        knitr_1.30        
+=======
+##  [9] lattice_0.20-41    nlme_3.1-149       evaluate_0.14      lifecycle_0.2.0   
+## [13] tibble_3.0.3       gtable_0.3.0       mgcv_1.8-31        pkgconfig_2.0.3   
+## [17] rlang_0.4.7        Matrix_1.2-18      yaml_2.2.1         xfun_0.18         
+## [21] withr_2.3.0        stringr_1.4.0      dplyr_1.0.2        knitr_1.30        
+>>>>>>> 76832b8... Cambios
 ## [25] generics_0.0.2     vctrs_0.3.4        grid_4.0.2         tidyselect_1.1.0  
 ## [29] reshape_0.8.8      glue_1.4.2         R6_2.4.1           rmarkdown_2.4     
 ## [33] purrr_0.3.4        farver_2.0.3       magrittr_1.5       splines_4.0.2     
 ## [37] scales_1.1.1       ellipsis_0.3.1     htmltools_0.5.0    colorspace_1.4-1  
 ## [41] labeling_0.3       stringi_1.5.3      munsell_0.5.0      crayon_1.3.4</code></pre>
 </div>
+<<<<<<< HEAD
+=======
+</div>
+>>>>>>> 76832b8... Cambios
 </section>
 
 
