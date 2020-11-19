@@ -1,7 +1,7 @@
 ---
 title: "Tarea 4"
 author: "Ingrid Molina, Minor Solano & Raquel Bone"
-date: "16/11/2020"
+date: "19/11/2020"
 output: 
  prettydoc::html_pretty:
     theme: Cayman
@@ -18,25 +18,59 @@ knitr::opts_chunk$set(echo = TRUE)
 
 En un periodo de 10 años (A) Nuestro equipo trabajó en 60 poblaciones (P) de *P. pajaritus* desde Canadá hasta Ecuador. En cada población tomamos una muestra de sangre de 10 individuos de la que extrajimos ADN genómico y amplificamos y secuenciamos los genes CMH-I para obtener el número de alelos por individuo.
 
-Además cuantificamos 5 variables que son indicadoras de la degradación del hábitat (H) y obtuvimos las coordenadas geográficas (L) para cada población.
+Además cuantificamos 5 variables que son indicadoras de la degradación del hábitat (H) y obtuvimos las coordenadas geográficas (efecto latitudinal L) para cada población.
 
-Nuestra **pregunta** es cómo se ve afectada la complejidad alélica (D) de *P. pajaritus* debido a la degradación del hábitat.
+Nuestra **pregunta** es ¿Cómo se ve afectada la complejidad alélica de *P. pajaritus* debido a la degradación del hábitat?
 
 ``` {r, echo=FALSE}
-Datos <- read.table("C:/Users/Usuario/Tarea_4/Datos_tarea4.csv", 
-                 header = TRUE,
-                 sep = ",")
+#Establecemos directorio de trabajo
+setwd("C:/Users/raque/Desktop/Ciencia_rep/Tarea_4")
+
+#Diagrama causal de hipótesis
+
+require(ggdag)
+
+dagified <- dagify(D ~ H,
+                   D ~ L,
+                   H ~ L,
+                   exposure = "H",
+                   outcome = "D")
+
+ggdag(dagified, layout = "circle") + theme_dag()
+
+#Set de datos
+Datos <- read.table("Datos_tarea4.csv", header = TRUE, sep = ",")
+head(Datos)
+str(Datos) #revisamos formato de variables
 
 ```
 
-```{r load-packages, include=FALSE}
+Según nuestro DAG el efecto latitudinal presenta un fork con la variable respuesta D y la degradación del hábitat, así que es conveniente controlar esta variable.
+
+
+```{r load-packages}
+
+#Cargamos librerías 
+library(psych)
+library(lme4)
 library(ggplot2)
 library(GGally)
+
 ```
 
-### Explorando los datos 
+### Exploramos los datos 
 
-Hacemos un gráfico para observar visualmente las relaciones entre las variables predictoras y la variable respuesta
+```{r}
+
+#Chequeamos distribucion de datos de conteo
+hist(Datos$D)
+qqnorm(Datos$D)
+
+```
+
+Al ser un conteo, nuestra variable respuesta muestra una distribución Poisson "inversa".
+
+Hacemos un gráfico para observar visualmente las relaciones entre las variables predictoras y la variable respuesta.
 
 ``` {r}
 
@@ -45,203 +79,96 @@ ggpairs(Datos, lower = list(continuous = "smooth"),
 
 ```
 
-Las variables que tienen una mayor relación lineal con la Diversidad alélica son: H4 (r= -0.66), Latitud (r= 0.334) y H1 (r= 0.304).
+
+Las variables que tienen una mayor correlación con la diversidad alélica son: H4 (r= -0.66), latitud (r= 0.334) y H1 (r= 0.304).
 
 
-## 1. Modelo lineal con todos los predictores
+### Evaluación de supuestos y modelos
 
 ``` {r}
 
-regresion <- lm(D~H1+H2+H3+H4+H5+P+L, data = Datos)
+names(Datos)
+summary(Datos)
 
-summary(regresion)
+#Inspeccionamos modelo con distribución Poisson
+M1 <- glm(D ~ H1 + H2 + H3 + H4 + H5 + P + L, data = Datos, family = poisson)
+summary(M1)
+
+#Determinamos cuanto explica el modelo los datos
+1 - (M1$deviance / M1$null.deviance)
+
+#Inspeccionamos si hay sobre dispersión 
+resid.dev <- M1$deviance # Extraemos la deviance y los grados de libertad
+resid.DF <- M1$df.residual
+resid.dev / resid.DF #Si esta proporción es cercana a 1, no hay SP
 
 ```
 
 
-El modelo con todas las variables introducidas como predictores tiene un R2 de casi 0.5 (0.496), es capaz de explicar el 50% de la variabilidad observada en la Diversidad alélica. El p-value del modelo es significativo (2.2e-16).  Muchos de los coeficientes parciales de regresión no son significativos, lo que es un indicativo de que podrían no contribuir al modelo.
+El modelo explica cerca del 42% de la varianza de los datos. 
+La proporción es cercana a 1, así que consideramos que no hay mucha sobre dispersión.
 
-### Selección del mejor modelo
-Iniciando el modelo con todas las variables como predictores y realizando la selección de los mejores predictores con la medición Akaike(AIC).
-
+A continuación, vamos a chequear si nuestro modelo es mejor que el modelo nulo o un modelo con menos factores.
 
 ```{r}
-step(object = regresion, direction = "both", trace = 1)
+#Selección de modelos
+M0 <- glm(D ~ 1, data = Datos, family = poisson) #modelo nulo
+M1 <- glm(D ~ H1 + H2 + H3 + H4 + H5 + P + L + A, data = Datos, family = poisson)
+M2 <- glm(D ~ H2 + H3 + H4 + H5 + P + L + A, data = Datos, family = poisson)
+M3 <- glm(D ~ H1 + H3 + H4 + H5 + P + L + A, data = Datos, family = poisson)
+M4 <- glm(D ~ H1 + H2 + H3 + H5 + P + L+ A, data = Datos, family = poisson)
+M5 <- glm(D ~ H1 + H2 + H3 + H4 + P + L+ A, data = Datos, family = poisson)
+
+# Chequeamos AIC
+AIC(M0, M1, M2, M3, M4, M5)
+
+
+#Los modelos M1 y M5 presentan los menores coeficientes AIC, que no son significativamente distintos 
+anova(M1, M5, test = "Chi")
+
 ```
 
-
-El mejor modelo resultante del proceso de selección ha sido:
-lm(formula = D ~ H1 + H2 + H4 + H5 + P + L, data = Datos)
-Le llamaremos modelo1
-
-
-```{r}
-
-modelo1 <- lm(formula = D ~ H1 + H2 + H4 + H5 + P + L, data = Datos)
-
-summary(modelo1)
-
-```
-
-### Interpretación del modelo
-
-Por cada unidad que aumenta el predictor H1, la Diversidad alélica disminuye en promedio 1.9 unidades, manteniéndose constantes el resto de predictores.
-
-Por cada unidad que aumenta el predictor H2, la Diversidad alélica disminuye en promedio 1.7 unidades, manteniéndose constantes el resto de predictores.
-
-Por cada unidad que aumenta el predictor H4, la Diversidad alélica disminuye en promedio 6 unidades, manteniéndose constantes el resto de predictores.
-
-Por cada unidad que aumenta el predictor H5, la Diversidad alélica aumenta en promedio 6 unidades, manteniéndose constantes el resto de predictores.
-
-Por cada unidad que aumenta la Latitud, la Diversidad alélica disminuye en promedio 0.4 unidades, manteniéndose constantes el resto de predictores.
-
-Creemos que sería más eficiente utilizar únicamente una variable, H4, como proxy de la destrucción del hábitat en lugar de 5 variables como indicadoras de esa destrucción... Pero para asegurarnos de que efectivamente es la variable adecuada proponemos:
-
-## 2. Modelos para cada una de las variables de degradación de hábitat (H)
-
-Dado que tenemos cinco variables distintas para medir la degradación del hábitat, probamos hacer un modelo para cada una de estas variables por aparte, para evaluar si tienen un efecto distinto sobre la diversidad alélica de *P. pajaritus* y poder elegir la que tiene un mayor efecto.
+Elegimos el M5 por ser mas parsimonioso.
 
 ```{r}
 
-# Modelo lineal con H1
-m1 <- lm(D ~ H1 + P + L, Datos)
-summary(m1)
+#Resumen del modelo
+summary(M5)
 
-# Modelo lineal con H2
-m2 <- lm(D ~ H2 + P + L, Datos)
-summary(m2)
+#Determinamos cuanto explica el modelo los datos
+1 - (M5$deviance / M5$null.deviance)
 
-# Modelo lineal con H3
-m3 <- lm(D ~ H3 + P + L, Datos)
-summary(m3)
-
-# Modelo lineal con H4
-m4 <- lm(D ~ H4 + P + L, Datos)
-summary(m4)
-
-# Modelo lineal con H5
-m5 <- lm(D ~ H5 + P + L, Datos)
-summary(m5)
+#Inspeccionamos si hay sobre dispersión 
+resid.dev <- M5$deviance # Extraemos la deviance y los grados de libertad
+resid.DF <- M5$df.residual
+resid.dev / resid.DF #Si esta proporción es cercana a 1, no hay SP
 
 ```
-
-### Interpretación de los modelos
-
-Obtuvimos que H1 y H4 son las mejores candidatas para representar la degradación del hábitat en nuestro mejor modelo. 
-En el modelo m1, donde incluimos H1, observamos un efecto significativo de esta variable, donde por cada unidad que aumente H1, la diversidad alélica disminuye en promedio 2 unidades. Además, observamos un efecto significativo del efecto latitudinal, donde por cada unidad que aumentemos en latitud, la D disminuye en promedio 3.4 unidades, también se observa también un leve efecto significativo de cada población de *P. pajaritus* (estimado = 0.16).
-
-Mientras que con el modelo m4, donde evaluamos a H4, obtuvimos un mayor efecto de la variable, pues por cada unidad que aumente H4, la diversidad alélica disminuye en promedio 6 unidades. No obstante, en este modelo no observamos un efecto significativo de las poblaciones de *P. pajaritus*, y a pesar de que se mantiene un efecto de la latitud, éste es menos marcado, ya que por cada unidad que aumente, se disminuye en promedio 1 unidad de diversidad alélica.
-
-Dadas estas diferencias observadas entre las variables H, y el dilema entre las variables H4 y H1, sugerimos probar si excluyendo alguna (s) poblacion (es) de *P. pajaritus* podamos evaluar si al hacer estas variaciones observemos un efecto significativo de la variable población (P) en el modelo lineal con H4.
-
-<<<<<<< HEAD
-## 3. 
-=======
-
-## 3. Módelo para cada una de las variables de degradación de hábitat (H), considerando homogeneidad en las poblaciones
-
-
-Dado que tenemos cinco variables distintas para medir la degradación del hábitat, probamos hacer un modelo para cada una de estas variables para evaluar si tienen un efecto distinto sobre la diversidad alélica de *P. pajaritus*. Sin embargo, tenemos 60 poblaciones, cada una con 10 aves, es decir 600 aves, por lo que vamos a asumir que este es nuestro N.
-
-```{r}
-# Modelo lineal con H1
-m1.1 <- lm(D ~ H1 + L, Datos)
-summary(m1.1)
-
-# Modelo lineal con H2
-m2.1 <- lm(D ~ H2 + L, Datos)
-summary(m2.1)
-
-# Modelo lineal con H3
-m3.1 <- lm(D ~ H3 + L, Datos)
-summary(m3.1)
-
-# Modelo lineal con H4
-m4.1 <- lm(D ~ H4 + L, Datos)
-summary(m4.1)
-
-# Modelo lineal con H5
-m5.1 <- lm(D ~ H5  + L, Datos)
-summary(m5.1)
-
-m <- c(m1.1$effects, m2.1$effects, m3.1$effects, m4.1$effects, m5.1$effects)
-
-```
-### Interpretación de los modelos
-
-En este caso, los modelos con H1, H2 y H4 son las mejores candidatos para representar la degradación del hábitat en nuestro mejor modelo. 
-
-En el modelo m1.1, con H1, observamos un efecto significativo de esta variable, donde por cada unidad que aumente H1, la diversidad alélica disminuye en 2.2 unidad.
-
-En el modelo m2.1, con H2, observamos también un efecto significativo de esta variable, donde por cada unidad que aumente H2, la diversidad alélica disminuye en 1.8 unidades.
-
-Mientras que con el modelo m4.4, con H4, obtuvimos un mayor efecto de la variable, pues por cada unidad que aumente H4, la diversidad alélica disminuye en promedio 6 unidades.
-
-En general, observamos un efecto significativo del efecto latitudinal, a excepción del modelo con H4.
-
->>>>>>> 76832b8... Cambios
-
-## 3. Módelo para cada una de las variables de degradación de hábitat (H), considerando que los individuos no son unidades independientes.
-
-Es un error asumir N=600 y eliminar la variable "Población" de los modelos. Cada uno de los pájaros no son independientes entre sí sino que están agrupados en poblaciones. Si eliminamos esa variable estaríamos subestimando la incertidumbre del efecto de cada una de las H sobre la diversidad alélica. 
-
-Propongo dejar "Población" como variable en los modelos 
-
-```{r}
-
-# Modelo lineal con H1
-mH1 <- lm(D ~ H1 + L + P, Datos)
-summary(m1)
-
-# Modelo lineal con H2
-mH2 <- lm(D ~ H2 + L + P, Datos)
-summary(m2)
-
-# Modelo lineal con H3
-mH3 <- lm(D ~ H3 + L + P, Datos)
-summary(m3)
-
-# Modelo lineal con H4
-mH4 <- lm(D ~ H4 + L + P, Datos)
-summary(m4)
-
-# Modelo lineal con H5
-mH5 <- lm(D ~ H5 + L + P, Datos)
-summary(m5)
-
-```
-
-### Interprestación de los modelos
-
-Los modelos que incluyen H1 y H4 muestran efectos significativos de estas variables sobre la diversidad alélica. 
-En el modelo mH1, observamos que por cada unidad que aumente H1, la diversidad alélica disminuye en promedio 2 unidades. Además, observamos un efecto significativo del efecto latitudinal, donde por cada unidad que aumentemos en latitud, la diversidad alélica disminuye en promedio 3.4 unidades.
-Además se observa un efecto significativo leve de cada población de *P. pajaritus* (estimado = 0.16) Si hubieramos eliminado "población" **no notaríamos este efecto.**
-
-Con mH4, por cada unidad que aumente H4, la diversidad alélica disminuye en promedio 6 unidades. No obstante, no observamos un efecto significativo de las poblaciones de *P. pajaritus*.
-Hay efecto leve de la latitud ya que por cada unidad que aumente, se disminuye en promedio 1 unidad de diversidad alélica.
-
-
-## 2. Modelos para efectos de las variables de degradación de hábitat (H), pero no por separado
-
-_De acuerdo con incluir poblaciones_. Sin embargo, hacer una interpretación acerca la diferencia entre las variables de degradación del hábitat (H) por separado no es correcto, en realidad lo que hicimos fue investigar cada una por aparte
-
-Propongo incluirlas en un mismo modelo
 
 
 ```{r}
-m2.1 <- lm(formula = D ~ H1 + H2 + H3 + H4 + H5 + P + L, data = Datos)
+#Predicción del modelo
+Datos$fit <- predict(M5, type = "response")
 
-summary(m2.1)
+#Ordenamos por efecto latitudinal, año y población
+Datos2 <- Datos[with(Datos, order(L, A, P)), ]
+
+#Intento de gráfico
+ggplot(Datos2, aes(x = H4, y = fit, colour = L)) +
+  geom_point(aes(y = D), alpha = 0.5, 
+             position=position_jitter(h = 0.2)) +
+  geom_line(size = 1.85) +
+  labs(x = "Degradación Habitat (H4)", y = "Diversidad Alélica") +
+  theme_classic()
 
 ```
-### Interprestación del modelo
 
-En el modelo, las variables H1, H2 y H4 muestran efectos significativos sobre la diversidad alélica. 
-En el modelo m2.1, observamos que por cada unidad que aumente H1, la diversidad alélica disminuye en promedio 1.9 unidades, por cada unidad que aumente H2 disminuye 1.6 la diversidad alélica y por cada unidad que aumente H4, disminuye 5.8 la diversidad alélica. 
-Además, observamos un efecto significativo del efecto latitudinal (p<0.05), donde por cada unidad que aumentemos en latitud, la diversidad alélica disminuye en promedio 0.9 unidades.
 
-No se observa un efecto significativo por la población de *P. pajaritus*
+De acuerdo a nuestros resultados, no existe un efecto significativo latitudinal sobre la diversidad alélica, lo cual es muy interesante, pues si se registra un efecto covariable leve de la población en específico (estimado= 0.03) y con mayor peso del año que se tomaron los datos (estimado= -0.18). Encontramos que la degradación del hábitat medida a través de las variables H4, H1 y H2 tienen influencia sobre la diversidad alélica de *P. pajaritus*, siendo el mayor el de la variable H4 (estimado= -0.12).
 
+Según nuestro modelo predictivo, se explica un 45% de los datos, y observamos la tendencia de que a mayor degradación ambiental disminuye la diversidad alélica. 
+
+Con estos resultados concluimos que es importante tomar en cuentas las variaciones anuales y en específico la degradación del hábitat H4 para predecir la diversidad alélica de *P. pajaritus*. Además, se infiere que existe otro factor determinante en la diversidad alélica que no se midió en este estudio.
 
 
 **Información de la sesión**
