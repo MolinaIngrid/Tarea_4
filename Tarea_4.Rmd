@@ -234,14 +234,14 @@ m2.1 <- lm(formula = D ~ H1 + H2 + H3 + H4 + H5 + P + L, data = Datos)
 summary(m2.1)
 
 ```
-
 ### Interprestación del modelo
 
-En el modelo, las variables H1, H2 y H4 muestran efectos significativos de estas variables sobre la diversidad alélica. 
+En el modelo, las variables H1, H2 y H4 muestran efectos significativos sobre la diversidad alélica. 
 En el modelo m2.1, observamos que por cada unidad que aumente H1, la diversidad alélica disminuye en promedio 1.9 unidades, por cada unidad que aumente H2 disminuye 1.6 la diversidad alélica y por cada unidad que aumente H4, disminuye 5.8 la diversidad alélica. 
 Además, observamos un efecto significativo del efecto latitudinal (p<0.05), donde por cada unidad que aumentemos en latitud, la diversidad alélica disminuye en promedio 0.9 unidades.
 
 No se observa un efecto significativo por la población de *P. pajaritus*
+
 
 
 **Información de la sesión**
