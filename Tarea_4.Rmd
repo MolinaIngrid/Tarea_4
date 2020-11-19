@@ -23,7 +23,7 @@ Además cuantificamos 5 variables que son indicadoras de la degradación del há
 Nuestra **pregunta** es cómo se ve afectada la complejidad alélica (D) de *P. pajaritus* debido a la degradación del hábitat.
 
 ``` {r, echo=FALSE}
-Datos <- read.table("C:/Users/in/Documents/MAESTRIA/Cursos/Estrategias/Tarea.4/Datos_tarea4.csv", 
+Datos <- read.table("C:/Users/Usuario/Tarea_4/Datos_tarea4.csv", 
                  header = TRUE,
                  sep = ",")
 
@@ -219,6 +219,29 @@ Además se observa un efecto significativo leve de cada población de *P. pajari
 
 Con mH4, por cada unidad que aumente H4, la diversidad alélica disminuye en promedio 6 unidades. No obstante, no observamos un efecto significativo de las poblaciones de *P. pajaritus*.
 Hay efecto leve de la latitud ya que por cada unidad que aumente, se disminuye en promedio 1 unidad de diversidad alélica.
+
+
+## 2. Modelos para efectos de las variables de degradación de hábitat (H), pero no por separado
+
+_De acuerdo con incluir poblaciones_. Sin embargo, hacer una interpretación acerca la diferencia entre las variables de degradación del hábitat (H) por separado no es correcto, en realidad lo que hicimos fue investigar cada una por aparte
+
+Propongo incluirlas en un mismo modelo
+
+
+```{r}
+m2.1 <- lm(formula = D ~ H1 + H2 + H3 + H4 + H5 + P + L, data = Datos)
+
+summary(m2.1)
+
+```
+
+### Interprestación del modelo
+
+En el modelo, las variables H1, H2 y H4 muestran efectos significativos de estas variables sobre la diversidad alélica. 
+En el modelo m2.1, observamos que por cada unidad que aumente H1, la diversidad alélica disminuye en promedio 1.9 unidades, por cada unidad que aumente H2 disminuye 1.6 la diversidad alélica y por cada unidad que aumente H4, disminuye 5.8 la diversidad alélica. 
+Además, observamos un efecto significativo del efecto latitudinal (p<0.05), donde por cada unidad que aumentemos en latitud, la diversidad alélica disminuye en promedio 0.9 unidades.
+
+No se observa un efecto significativo por la población de *P. pajaritus*
 
 
 **Información de la sesión**

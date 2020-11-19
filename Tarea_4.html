@@ -15,52 +15,29 @@
 
 <title>Tarea 4</title>
 
-<style type="text/css">
-a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
-a.anchor-section::before {content: '#';}
-.hasAnchor:hover a.anchor-section {visibility: visible;}
-</style>
-<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
 document.addEventListener('DOMContentLoaded', function() {
-  // Do nothing if AnchorJS is used
-  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
-    return;
-  }
-
-  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-
-  // Do nothing if sections are already anchored
-  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
-    return null;
-  }
-
-  // Use section id when pandoc runs with --section-divs
-  const section_id = function(x) {
-    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
-            ? x.id : '');
-  };
-
-  // Add anchors
-  h.forEach(function(x) {
-    const id = x.id || section_id(x.parentElement);
-    if (id === '') {
-      return null;
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
     }
-    let anchor = document.createElement('a');
-    anchor.href = '#' + id;
-    anchor.classList = ['anchor-section'];
-    x.classList.add('hasAnchor');
-    x.appendChild(anchor);
-  });
+  }
 });
 </script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -70,14 +47,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -86,9 +65,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -191,8 +170,8 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="explorando-los-datos" class="section level3">
 <h3>Explorando los datos</h3>
 <p>Hacemos un gráfico para observar visualmente las relaciones entre las variables predictoras y la variable respuesta</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">ggpairs</span>(Datos, <span class="dt">lower =</span> <span class="kw">list</span>(<span class="dt">continuous =</span> <span class="st">&quot;smooth&quot;</span>),</a>
-<a class="sourceLine" id="cb1-2" title="2">        <span class="dt">diag =</span> <span class="kw">list</span>(<span class="dt">continuous =</span> <span class="st">&quot;barDiag&quot;</span>), <span class="dt">axisLabels =</span> <span class="st">&quot;none&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">ggpairs</span>(Datos, <span class="dt">lower =</span> <span class="kw">list</span>(<span class="dt">continuous =</span> <span class="st">&quot;smooth&quot;</span>),</span>
+<span id="cb1-2"><a href="#cb1-2"></a>        <span class="dt">diag =</span> <span class="kw">list</span>(<span class="dt">continuous =</span> <span class="st">&quot;barDiag&quot;</span>), <span class="dt">axisLabels =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
 <pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
@@ -207,9 +186,9 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 </div>
 <div id="modelo-lineal-con-todos-los-predictores" class="section level2">
 <h2>1. Modelo lineal con todos los predictores</h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">regresion &lt;-<span class="st"> </span><span class="kw">lm</span>(D<span class="op">~</span>H1<span class="op">+</span>H2<span class="op">+</span>H3<span class="op">+</span>H4<span class="op">+</span>H5<span class="op">+</span>P<span class="op">+</span>L, <span class="dt">data =</span> Datos)</a>
-<a class="sourceLine" id="cb3-2" title="2"></a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="kw">summary</span>(regresion)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>regresion &lt;-<span class="st"> </span><span class="kw">lm</span>(D<span class="op">~</span>H1<span class="op">+</span>H2<span class="op">+</span>H3<span class="op">+</span>H4<span class="op">+</span>H5<span class="op">+</span>P<span class="op">+</span>L, <span class="dt">data =</span> Datos)</span>
+<span id="cb3-2"><a href="#cb3-2"></a></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="kw">summary</span>(regresion)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = D ~ H1 + H2 + H3 + H4 + H5 + P + L, data = Datos)
@@ -238,7 +217,7 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="selección-del-mejor-modelo" class="section level3">
 <h3>Selección del mejor modelo</h3>
 <p>Iniciando el modelo con todas las variables como predictores y realizando la selección de los mejores predictores con la medición Akaike(AIC).</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">step</span>(<span class="dt">object =</span> regresion, <span class="dt">direction =</span> <span class="st">&quot;both&quot;</span>, <span class="dt">trace =</span> <span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">step</span>(<span class="dt">object =</span> regresion, <span class="dt">direction =</span> <span class="st">&quot;both&quot;</span>, <span class="dt">trace =</span> <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>## Start:  AIC=2360.79
 ## D ~ H1 + H2 + H3 + H4 + H5 + P + L
 ## 
@@ -274,9 +253,9 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 ##           L  
 ##    -0.98640</code></pre>
 <p>El mejor modelo resultante del proceso de selección ha sido: lm(formula = D ~ H1 + H2 + H4 + H5 + P + L, data = Datos) Le llamaremos modelo1</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">modelo1 &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="dt">formula =</span> D <span class="op">~</span><span class="st"> </span>H1 <span class="op">+</span><span class="st"> </span>H2 <span class="op">+</span><span class="st"> </span>H4 <span class="op">+</span><span class="st"> </span>H5 <span class="op">+</span><span class="st"> </span>P <span class="op">+</span><span class="st"> </span>L, <span class="dt">data =</span> Datos)</a>
-<a class="sourceLine" id="cb8-2" title="2"></a>
-<a class="sourceLine" id="cb8-3" title="3"><span class="kw">summary</span>(modelo1)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>modelo1 &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="dt">formula =</span> D <span class="op">~</span><span class="st"> </span>H1 <span class="op">+</span><span class="st"> </span>H2 <span class="op">+</span><span class="st"> </span>H4 <span class="op">+</span><span class="st"> </span>H5 <span class="op">+</span><span class="st"> </span>P <span class="op">+</span><span class="st"> </span>L, <span class="dt">data =</span> Datos)</span>
+<span id="cb8-2"><a href="#cb8-2"></a></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="kw">summary</span>(modelo1)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = D ~ H1 + H2 + H4 + H5 + P + L, data = Datos)
@@ -314,9 +293,9 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="modelos-para-cada-una-de-las-variables-de-degradación-de-hábitat-h" class="section level2">
 <h2>2. Modelos para cada una de las variables de degradación de hábitat (H)</h2>
 <p>Dado que tenemos cinco variables distintas para medir la degradación del hábitat, probamos hacer un modelo para cada una de estas variables por aparte, para evaluar si tienen un efecto distinto sobre la diversidad alélica de <em>P. pajaritus</em> y poder elegir la que tiene un mayor efecto.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="co"># Modelo lineal con H1</span></a>
-<a class="sourceLine" id="cb10-2" title="2">m1 &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H1 <span class="op">+</span><span class="st"> </span>P <span class="op">+</span><span class="st"> </span>L, Datos)</a>
-<a class="sourceLine" id="cb10-3" title="3"><span class="kw">summary</span>(m1)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># Modelo lineal con H1</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a>m1 &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H1 <span class="op">+</span><span class="st"> </span>P <span class="op">+</span><span class="st"> </span>L, Datos)</span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="kw">summary</span>(m1)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = D ~ H1 + P + L, data = Datos)
@@ -337,9 +316,9 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 ## Residual standard error: 8.742 on 596 degrees of freedom
 ## Multiple R-squared:  0.2331, Adjusted R-squared:  0.2293 
 ## F-statistic: 60.39 on 3 and 596 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="co"># Modelo lineal con H2</span></a>
-<a class="sourceLine" id="cb12-2" title="2">m2 &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H2 <span class="op">+</span><span class="st"> </span>P <span class="op">+</span><span class="st"> </span>L, Datos)</a>
-<a class="sourceLine" id="cb12-3" title="3"><span class="kw">summary</span>(m2)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># Modelo lineal con H2</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>m2 &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H2 <span class="op">+</span><span class="st"> </span>P <span class="op">+</span><span class="st"> </span>L, Datos)</span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="kw">summary</span>(m2)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = D ~ H2 + P + L, data = Datos)
@@ -360,9 +339,9 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 ## Residual standard error: 8.886 on 596 degrees of freedom
 ## Multiple R-squared:  0.2077, Adjusted R-squared:  0.2037 
 ## F-statistic: 52.07 on 3 and 596 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="co"># Modelo lineal con H3</span></a>
-<a class="sourceLine" id="cb14-2" title="2">m3 &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H3 <span class="op">+</span><span class="st"> </span>P <span class="op">+</span><span class="st"> </span>L, Datos)</a>
-<a class="sourceLine" id="cb14-3" title="3"><span class="kw">summary</span>(m3)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># Modelo lineal con H3</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a>m3 &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H3 <span class="op">+</span><span class="st"> </span>P <span class="op">+</span><span class="st"> </span>L, Datos)</span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="kw">summary</span>(m3)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = D ~ H3 + P + L, data = Datos)
@@ -383,9 +362,9 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 ## Residual standard error: 8.979 on 596 degrees of freedom
 ## Multiple R-squared:  0.191,  Adjusted R-squared:  0.1869 
 ## F-statistic: 46.91 on 3 and 596 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="co"># Modelo lineal con H4</span></a>
-<a class="sourceLine" id="cb16-2" title="2">m4 &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H4 <span class="op">+</span><span class="st"> </span>P <span class="op">+</span><span class="st"> </span>L, Datos)</a>
-<a class="sourceLine" id="cb16-3" title="3"><span class="kw">summary</span>(m4)</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="co"># Modelo lineal con H4</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a>m4 &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H4 <span class="op">+</span><span class="st"> </span>P <span class="op">+</span><span class="st"> </span>L, Datos)</span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="kw">summary</span>(m4)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = D ~ H4 + P + L, data = Datos)
@@ -406,9 +385,9 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 ## Residual standard error: 7.466 on 596 degrees of freedom
 ## Multiple R-squared:  0.4407, Adjusted R-squared:  0.4379 
 ## F-statistic: 156.5 on 3 and 596 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1"><span class="co"># Modelo lineal con H5</span></a>
-<a class="sourceLine" id="cb18-2" title="2">m5 &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H5 <span class="op">+</span><span class="st"> </span>P <span class="op">+</span><span class="st"> </span>L, Datos)</a>
-<a class="sourceLine" id="cb18-3" title="3"><span class="kw">summary</span>(m5)</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># Modelo lineal con H5</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a>m5 &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H5 <span class="op">+</span><span class="st"> </span>P <span class="op">+</span><span class="st"> </span>L, Datos)</span>
+<span id="cb18-3"><a href="#cb18-3"></a><span class="kw">summary</span>(m5)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = D ~ H5 + P + L, data = Datos)
@@ -440,9 +419,9 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="módelo-para-cada-una-de-las-variables-de-degradación-de-hábitat-h-considerando-homogeneidad-en-las-poblaciones" class="section level2">
 <h2>3. Módelo para cada una de las variables de degradación de hábitat (H), considerando homogeneidad en las poblaciones</h2>
 <p>Dado que tenemos cinco variables distintas para medir la degradación del hábitat, probamos hacer un modelo para cada una de estas variables para evaluar si tienen un efecto distinto sobre la diversidad alélica de <em>P. pajaritus</em>. Sin embargo, tenemos 60 poblaciones, cada una con 10 aves, es decir 600 aves, por lo que vamos a asumir que este es nuestro N.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1"><span class="co"># Modelo lineal con H1</span></a>
-<a class="sourceLine" id="cb20-2" title="2">m1<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H1 <span class="op">+</span><span class="st"> </span>L, Datos)</a>
-<a class="sourceLine" id="cb20-3" title="3"><span class="kw">summary</span>(m1<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="co"># Modelo lineal con H1</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a>m1<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H1 <span class="op">+</span><span class="st"> </span>L, Datos)</span>
+<span id="cb20-3"><a href="#cb20-3"></a><span class="kw">summary</span>(m1<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = D ~ H1 + L, data = Datos)
@@ -462,9 +441,9 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 ## Residual standard error: 9.174 on 597 degrees of freedom
 ## Multiple R-squared:  0.154,  Adjusted R-squared:  0.1511 
 ## F-statistic: 54.32 on 2 and 597 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1"><span class="co"># Modelo lineal con H2</span></a>
-<a class="sourceLine" id="cb22-2" title="2">m2<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H2 <span class="op">+</span><span class="st"> </span>L, Datos)</a>
-<a class="sourceLine" id="cb22-3" title="3"><span class="kw">summary</span>(m2<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="co"># Modelo lineal con H2</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a>m2<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H2 <span class="op">+</span><span class="st"> </span>L, Datos)</span>
+<span id="cb22-3"><a href="#cb22-3"></a><span class="kw">summary</span>(m2<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = D ~ H2 + L, data = Datos)
@@ -484,9 +463,9 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 ## Residual standard error: 9.273 on 597 degrees of freedom
 ## Multiple R-squared:  0.1356, Adjusted R-squared:  0.1327 
 ## F-statistic: 46.82 on 2 and 597 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1"><span class="co"># Modelo lineal con H3</span></a>
-<a class="sourceLine" id="cb24-2" title="2">m3<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H3 <span class="op">+</span><span class="st"> </span>L, Datos)</a>
-<a class="sourceLine" id="cb24-3" title="3"><span class="kw">summary</span>(m3<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="co"># Modelo lineal con H3</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a>m3<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H3 <span class="op">+</span><span class="st"> </span>L, Datos)</span>
+<span id="cb24-3"><a href="#cb24-3"></a><span class="kw">summary</span>(m3<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = D ~ H3 + L, data = Datos)
@@ -506,9 +485,9 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 ## Residual standard error: 9.366 on 597 degrees of freedom
 ## Multiple R-squared:  0.1183, Adjusted R-squared:  0.1154 
 ## F-statistic: 40.06 on 2 and 597 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1"><span class="co"># Modelo lineal con H4</span></a>
-<a class="sourceLine" id="cb26-2" title="2">m4<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H4 <span class="op">+</span><span class="st"> </span>L, Datos)</a>
-<a class="sourceLine" id="cb26-3" title="3"><span class="kw">summary</span>(m4<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="co"># Modelo lineal con H4</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a>m4<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H4 <span class="op">+</span><span class="st"> </span>L, Datos)</span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="kw">summary</span>(m4<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = D ~ H4 + L, data = Datos)
@@ -528,9 +507,9 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 ## Residual standard error: 7.48 on 597 degrees of freedom
 ## Multiple R-squared:  0.4376, Adjusted R-squared:  0.4358 
 ## F-statistic: 232.3 on 2 and 597 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1"><span class="co"># Modelo lineal con H5</span></a>
-<a class="sourceLine" id="cb28-2" title="2">m5<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H5  <span class="op">+</span><span class="st"> </span>L, Datos)</a>
-<a class="sourceLine" id="cb28-3" title="3"><span class="kw">summary</span>(m5<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="co"># Modelo lineal con H5</span></span>
+<span id="cb28-2"><a href="#cb28-2"></a>m5<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H5  <span class="op">+</span><span class="st"> </span>L, Datos)</span>
+<span id="cb28-3"><a href="#cb28-3"></a><span class="kw">summary</span>(m5<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = D ~ H5 + L, data = Datos)
@@ -550,7 +529,7 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 ## Residual standard error: 9.366 on 597 degrees of freedom
 ## Multiple R-squared:  0.1182, Adjusted R-squared:  0.1152 
 ## F-statistic:    40 on 2 and 597 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1">m &lt;-<span class="st"> </span><span class="kw">c</span>(m1<span class="fl">.1</span><span class="op">$</span>effects, m2<span class="fl">.1</span><span class="op">$</span>effects, m3<span class="fl">.1</span><span class="op">$</span>effects, m4<span class="fl">.1</span><span class="op">$</span>effects, m5<span class="fl">.1</span><span class="op">$</span>effects)</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>m &lt;-<span class="st"> </span><span class="kw">c</span>(m1<span class="fl">.1</span><span class="op">$</span>effects, m2<span class="fl">.1</span><span class="op">$</span>effects, m3<span class="fl">.1</span><span class="op">$</span>effects, m4<span class="fl">.1</span><span class="op">$</span>effects, m5<span class="fl">.1</span><span class="op">$</span>effects)</span></code></pre></div>
 <div id="interpretación-de-los-modelos-1" class="section level3">
 <h3>Interpretación de los modelos</h3>
 <p>En este caso, los modelos con H1, H2 y H4 son las mejores candidatos para representar la degradación del hábitat en nuestro mejor modelo.</p>
@@ -579,9 +558,9 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 <h2>3. Módelo para cada una de las variables de degradación de hábitat (H), considerando que los individuos no son unidades independientes.</h2>
 <p>Es un error asumir N=600 y eliminar la variable “Población” de los modelos. Cada uno de los pájaros no son independientes entre sí sino que están agrupados en poblaciones. Si eliminamos esa variable estaríamos subestimando la incertidumbre del efecto de cada una de las H sobre la diversidad alélica.</p>
 <p>Propongo dejar “Población” como variable en los modelos</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="co"># Modelo lineal con H1</span></a>
-<a class="sourceLine" id="cb31-2" title="2">mH1 &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H1 <span class="op">+</span><span class="st"> </span>L <span class="op">+</span><span class="st"> </span>P, Datos)</a>
-<a class="sourceLine" id="cb31-3" title="3"><span class="kw">summary</span>(m1)</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="co"># Modelo lineal con H1</span></span>
+<span id="cb31-2"><a href="#cb31-2"></a>mH1 &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H1 <span class="op">+</span><span class="st"> </span>L <span class="op">+</span><span class="st"> </span>P, Datos)</span>
+<span id="cb31-3"><a href="#cb31-3"></a><span class="kw">summary</span>(m1)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = D ~ H1 + P + L, data = Datos)
@@ -602,9 +581,9 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 ## Residual standard error: 8.742 on 596 degrees of freedom
 ## Multiple R-squared:  0.2331, Adjusted R-squared:  0.2293 
 ## F-statistic: 60.39 on 3 and 596 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1"><span class="co"># Modelo lineal con H2</span></a>
-<a class="sourceLine" id="cb33-2" title="2">mH2 &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H2 <span class="op">+</span><span class="st"> </span>L <span class="op">+</span><span class="st"> </span>P, Datos)</a>
-<a class="sourceLine" id="cb33-3" title="3"><span class="kw">summary</span>(m2)</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="co"># Modelo lineal con H2</span></span>
+<span id="cb33-2"><a href="#cb33-2"></a>mH2 &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H2 <span class="op">+</span><span class="st"> </span>L <span class="op">+</span><span class="st"> </span>P, Datos)</span>
+<span id="cb33-3"><a href="#cb33-3"></a><span class="kw">summary</span>(m2)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = D ~ H2 + P + L, data = Datos)
@@ -625,9 +604,9 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 ## Residual standard error: 8.886 on 596 degrees of freedom
 ## Multiple R-squared:  0.2077, Adjusted R-squared:  0.2037 
 ## F-statistic: 52.07 on 3 and 596 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1"><span class="co"># Modelo lineal con H3</span></a>
-<a class="sourceLine" id="cb35-2" title="2">mH3 &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H3 <span class="op">+</span><span class="st"> </span>L <span class="op">+</span><span class="st"> </span>P, Datos)</a>
-<a class="sourceLine" id="cb35-3" title="3"><span class="kw">summary</span>(m3)</a></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="co"># Modelo lineal con H3</span></span>
+<span id="cb35-2"><a href="#cb35-2"></a>mH3 &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H3 <span class="op">+</span><span class="st"> </span>L <span class="op">+</span><span class="st"> </span>P, Datos)</span>
+<span id="cb35-3"><a href="#cb35-3"></a><span class="kw">summary</span>(m3)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = D ~ H3 + P + L, data = Datos)
@@ -648,9 +627,9 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 ## Residual standard error: 8.979 on 596 degrees of freedom
 ## Multiple R-squared:  0.191,  Adjusted R-squared:  0.1869 
 ## F-statistic: 46.91 on 3 and 596 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1"><span class="co"># Modelo lineal con H4</span></a>
-<a class="sourceLine" id="cb37-2" title="2">mH4 &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H4 <span class="op">+</span><span class="st"> </span>L <span class="op">+</span><span class="st"> </span>P, Datos)</a>
-<a class="sourceLine" id="cb37-3" title="3"><span class="kw">summary</span>(m4)</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="co"># Modelo lineal con H4</span></span>
+<span id="cb37-2"><a href="#cb37-2"></a>mH4 &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H4 <span class="op">+</span><span class="st"> </span>L <span class="op">+</span><span class="st"> </span>P, Datos)</span>
+<span id="cb37-3"><a href="#cb37-3"></a><span class="kw">summary</span>(m4)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = D ~ H4 + P + L, data = Datos)
@@ -671,9 +650,9 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 ## Residual standard error: 7.466 on 596 degrees of freedom
 ## Multiple R-squared:  0.4407, Adjusted R-squared:  0.4379 
 ## F-statistic: 156.5 on 3 and 596 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1"><span class="co"># Modelo lineal con H5</span></a>
-<a class="sourceLine" id="cb39-2" title="2">mH5 &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H5 <span class="op">+</span><span class="st"> </span>L <span class="op">+</span><span class="st"> </span>P, Datos)</a>
-<a class="sourceLine" id="cb39-3" title="3"><span class="kw">summary</span>(m5)</a></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a><span class="co"># Modelo lineal con H5</span></span>
+<span id="cb39-2"><a href="#cb39-2"></a>mH5 &lt;-<span class="st"> </span><span class="kw">lm</span>(D <span class="op">~</span><span class="st"> </span>H5 <span class="op">+</span><span class="st"> </span>L <span class="op">+</span><span class="st"> </span>P, Datos)</span>
+<span id="cb39-3"><a href="#cb39-3"></a><span class="kw">summary</span>(m5)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = D ~ H5 + P + L, data = Datos)
@@ -698,10 +677,47 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 <h3>Interprestación de los modelos</h3>
 <p>Los modelos que incluyen H1 y H4 muestran efectos significativos de estas variables sobre la diversidad alélica. En el modelo mH1, observamos que por cada unidad que aumente H1, la diversidad alélica disminuye en promedio 2 unidades. Además, observamos un efecto significativo del efecto latitudinal, donde por cada unidad que aumentemos en latitud, la diversidad alélica disminuye en promedio 3.4 unidades. Además se observa un efecto significativo leve de cada población de <em>P. pajaritus</em> (estimado = 0.16) Si hubieramos eliminado “población” <strong>no notaríamos este efecto.</strong></p>
 <p>Con mH4, por cada unidad que aumente H4, la diversidad alélica disminuye en promedio 6 unidades. No obstante, no observamos un efecto significativo de las poblaciones de <em>P. pajaritus</em>. Hay efecto leve de la latitud ya que por cada unidad que aumente, se disminuye en promedio 1 unidad de diversidad alélica.</p>
+</div>
+</div>
+<div id="modelos-para-efectos-de-las-variables-de-degradación-de-hábitat-h-pero-no-por-separado" class="section level2">
+<h2>2. Modelos para efectos de las variables de degradación de hábitat (H), pero no por separado</h2>
+<p><em>De acuerdo con incluir poblaciones</em>. Sin embargo, hacer una interpretación acerca la diferencia entre las variables de degradación del hábitat (H) por separado no es correcto, en realidad lo que hicimos fue investigar cada una por aparte</p>
+<p>Propongo incluirlas en un mismo modelo</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>m2<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="dt">formula =</span> D <span class="op">~</span><span class="st"> </span>H1 <span class="op">+</span><span class="st"> </span>H2 <span class="op">+</span><span class="st"> </span>H3 <span class="op">+</span><span class="st"> </span>H4 <span class="op">+</span><span class="st"> </span>H5 <span class="op">+</span><span class="st"> </span>P <span class="op">+</span><span class="st"> </span>L, <span class="dt">data =</span> Datos)</span>
+<span id="cb41-2"><a href="#cb41-2"></a></span>
+<span id="cb41-3"><a href="#cb41-3"></a><span class="kw">summary</span>(m2<span class="fl">.1</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = D ~ H1 + H2 + H3 + H4 + H5 + P + L, data = Datos)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -18.520  -4.272   1.245   4.937  16.977 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 44.34918    0.65871  67.327  &lt; 2e-16 ***
+## H1          -1.91423    0.30904  -6.194 1.10e-09 ***
+## H2          -1.68610    0.33796  -4.989 7.99e-07 ***
+## H3          -0.25722    0.34272  -0.751   0.4532    
+## H4          -5.79388    0.34714 -16.690  &lt; 2e-16 ***
+## H5           0.60148    0.32788   1.834   0.0671 .  
+## P            0.03017    0.01898   1.590   0.1124    
+## L           -0.93092    0.46342  -2.009   0.0450 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 7.104 on 592 degrees of freedom
+## Multiple R-squared:  0.4969, Adjusted R-squared:  0.491 
+## F-statistic: 83.54 on 7 and 592 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div id="interprestación-del-modelo" class="section level3">
+<h3>Interprestación del modelo</h3>
+<p>En el modelo, las variables H1, H2 y H4 muestran efectos significativos de estas variables sobre la diversidad alélica. En el modelo m2.1, observamos que por cada unidad que aumente H1, la diversidad alélica disminuye en promedio 1.9 unidades, por cada unidad que aumente H2 disminuye 1.6 la diversidad alélica y por cada unidad que aumente H4, disminuye 5.8 la diversidad alélica. Además, observamos un efecto significativo del efecto latitudinal (p&lt;0.05), donde por cada unidad que aumentemos en latitud, la diversidad alélica disminuye en promedio 0.9 unidades.</p>
+<p>No se observa un efecto significativo por la población de <em>P. pajaritus</em></p>
 <p><strong>Información de la sesión</strong></p>
-<pre><code>## R version 3.6.1 (2019-07-05)
+<pre><code>## R version 4.0.2 (2020-06-22)
 ## Platform: x86_64-w64-mingw32/x64 (64-bit)
-## Running under: Windows 10 x64 (build 18362)
+## Running under: Windows 10 x64 (build 18363)
 ## 
 ## Matrix products: default
 ## 
@@ -717,16 +733,17 @@ code span.er { color: #a61717; background-color: #e3d2d2; }
 ## [1] GGally_2.0.0  ggplot2_3.3.2
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_1.0.1         pillar_1.4.2       compiler_3.6.1     RColorBrewer_1.1-2
-##  [5] plyr_1.8.4         prettydoc_0.4.0    tools_3.6.1        digest_0.6.20     
-##  [9] evaluate_0.14      lifecycle_0.2.0    tibble_2.1.3       gtable_0.3.0      
-## [13] nlme_3.1-140       lattice_0.20-38    mgcv_1.8-28        pkgconfig_2.0.2   
-## [17] rlang_0.4.0        Matrix_1.2-17      yaml_2.2.1         xfun_0.18         
-## [21] withr_2.1.2        stringr_1.4.0      knitr_1.30         grid_3.6.1        
-## [25] reshape_0.8.8      glue_1.4.2         R6_2.4.0           rmarkdown_2.5     
-## [29] farver_2.0.3       magrittr_1.5       scales_1.1.1       htmltools_0.5.0   
-## [33] splines_3.6.1      colorspace_1.4-1   labeling_0.3       stringi_1.4.3     
-## [37] munsell_0.5.0      crayon_1.3.4</code></pre>
+##  [1] Rcpp_1.0.5         pillar_1.4.6       compiler_4.0.2     RColorBrewer_1.1-2
+##  [5] plyr_1.8.6         prettydoc_0.4.0    tools_4.0.2        digest_0.6.25     
+##  [9] lattice_0.20-41    nlme_3.1-149       evaluate_0.14      lifecycle_0.2.0   
+## [13] tibble_3.0.3       gtable_0.3.0       mgcv_1.8-31        pkgconfig_2.0.3   
+## [17] rlang_0.4.7        Matrix_1.2-18      yaml_2.2.1         xfun_0.18         
+## [21] withr_2.3.0        stringr_1.4.0      dplyr_1.0.2        knitr_1.30        
+## [25] generics_0.0.2     vctrs_0.3.4        grid_4.0.2         tidyselect_1.1.0  
+## [29] reshape_0.8.8      glue_1.4.2         R6_2.4.1           rmarkdown_2.4     
+## [33] purrr_0.3.4        farver_2.0.3       magrittr_1.5       splines_4.0.2     
+## [37] scales_1.1.1       ellipsis_0.3.1     htmltools_0.5.0    colorspace_1.4-1  
+## [41] labeling_0.3       stringi_1.5.3      munsell_0.5.0      crayon_1.3.4</code></pre>
 </div>
 </div>
 </section>
